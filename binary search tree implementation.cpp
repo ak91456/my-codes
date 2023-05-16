@@ -31,13 +31,17 @@ void inorder(node* root){
     inorder(root->right);
 }
 int main(){
-    node *root=new node(10);
-    bt(root,11);
-    bt(root,9);
-    bt(root,8);
-    bt(root,19);
-    bt(root,25);
-    bt(root,100);
-    bt(root,1);
+    int a;
+    cout<<"enter the value of root : ";
+    cin>>a;
+    node *root=new node(a);
+    int count;
+    cout<<"Enter the number of elements : ";
+    cin>>count;
+    cout<<"enter values : \n";
+    for(int i=0;i<count;i++){
+        cin>>a;
+        bt(root,a);
+    }
     inorder(root);
 }
