@@ -8,6 +8,13 @@ import pickle
 from sklearn.neighbors import KNeighborsClassifier
 from datetime import datetime
 
+from win32com.client import Dispatch
+
+def speak(str1):
+    speak=Dispatch(("SAPI.SpVoice"))
+    speak.Speak(str1)
+
+
 video=cv2.VideoCapture(0)
 
 facedetect=cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
@@ -21,7 +28,7 @@ with open('data/face_data.pkl','rb') as f:
 knn=KNeighborsClassifier(n_neighbors=5)
 knn.fit(FACES,LABELS)
 
-imgbackground=cv2.imread("")#picture to be inputted
+imgbackground=cv2.imread("bg.png")#picture to be inputted
 
 COL_NAMES=['NAME','TIME']
 
@@ -30,7 +37,7 @@ while True:
     gray=cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
     face=facedetect.detectMultiScale(gray,1.3,5)
 
-    for (x,y,w,h) in faces:
+    for (x,y,w,h) in face:
         crop_img=frame[y:y+h,x:x+w,:]
         resized_img=cv2.resize(crop_img,(50,50)).flatten().reshape(1,-1)
         output=knn.predict(resized_img)
@@ -45,10 +52,11 @@ while True:
         attendance=[str(output[0]),str(timestamp)]
     imgbackground[162:162+480,55:55+640]=frame
 
-
-    cv2.show("frame",imgbackground)
+    
+    cv2.imshow("frame",imgbackground)
     k=cv2.waitKey(1)
     if k==ord('o'):
+        speak("Attendance Taken..")
         time.sleep(5)
 
         if exist:
